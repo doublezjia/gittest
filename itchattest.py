@@ -1,5 +1,5 @@
 #coding=utf8
-import requests
+import requests,os
 import itchat
 
 key = 'dc47ce10cfd24347a6e0baf08401d2d8'
