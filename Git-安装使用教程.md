@@ -126,13 +126,16 @@ git支持多种协议，包括https，但通过ssh支持的原生git协议速度
 `git checkout -b 分支名`创建并切换到新的分支。
 `git checkout`加上`-b`相当于
 ```
-git branch 分支名>git checkout 分支名>```
+git branch 分支名
+git checkout 分支名
+```
 
 `git branch`用来查看所有分支，当前分支前面会有一个`*`号的。
 `git branch 分支名` 创建分支。
 `git checkout 分支名`切换分支。
 `git merge 分支名`合并指定分支到当前分支。
 `git branch -d 分支名`删除分支。
+
 
 ### 解决冲突
 
