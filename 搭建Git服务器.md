@@ -30,7 +30,7 @@ git:x:503:507::/home/git:/bin/bash
 ```
 改为
 ```
-git:x:503:507::/home/git:/sbin/nologin
+git:x:503:507::/home/git:/usr/bin/git-shell
 ```
 
 6. 克隆远程仓库
