@@ -99,6 +99,8 @@ ssh-keygen -t rsa -C "youremail@example.com"
 git remote add origin git@github.com:你的Github用户名/项目名称.git
 ```
 >远程库的名称默认叫法为`origin`,命令在Github新建仓库中会有提示。
+>删除关联用`git remote rm origin`
+>如果要关联多个远程库的,把`origin`这里改成不同的名称就可以了
 
 ### 推送到远程库
 推送到远程库用`git push`,把当前分支`master`推送到远程
@@ -143,4 +145,98 @@ git checkout 分支名
 Git用`<<<<<<<`，`=======`，`>>>>>>>`标记出不同分支的内容
 
 用`git log --graph`命令可以看到分支合并图。
+
+### 分支管理策略
+合并分支时，加上`--no-ff`参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而`fast forward`合并就看不出来曾经做过合并。
+>当使用`--no-ff`合并时要创建一个新的commit，所以要加上`-m`,然后写上commit的描述。
+>如```git merge --no-ff -m "merge with no-ff" dev```
+
+>可以通过`git log`查看分支历史
+
+### 储藏当前还没提交的工作区内容
+
+当在自己的分支中的修改还没有改好又不想提交时，又要急着处理bug时，可以通过`git stash`把当前工作现场储藏起来，然后切换到其他分支修复bug。完成后再切换回来，通过`git stash apply`进行恢复，然后继续工作。
+
+`git stash` 保存当前工作现场
+`git stash list` 查看保存的名称
+`git stash apply <name>` 恢复当前工作现场
+`git stash drop <name>` 删除stash保存的内容
+`git stash pop <name>` 恢复的同时把stash保存的内容删掉
+
+>这个可以应用在自己的内容还没修改好不想提交，又急着处理其他分支的事情时可以用到。
+>当手头工作没有完成时，先把工作现场`git stash`一下，然后去修复bug，修复后，再`git stash pop`，回到工作现场。
+>修复bug时，我们会通过创建新的bug分支进行修复，然后合并，最后删除
+
+### 强制删除还没合并的分支
+有时候当我们新建一个分支进行开发，最后发现不需要这个分支要把它删除时，因为这个分支不需要，所以不能合并到主分支上。要是直接运行`git branch -d <name>`发现不能删除，这是因为这个分支还没有合并的原因。这是可以使用`git branch -D <name>`强制删除。
+
+### 多人协助
+多人协作的工作模式通常是这样：
+
+1. 首先，可以试图用`git push origin branch-name`推送自己的修改；
+2. 如果推送失败，则因为远程分支比你的本地更新，需要先用`git pull`试图合并；
+3. 如果合并有冲突，则解决冲突，并在本地提交；
+4. 没有冲突或者解决掉冲突后，再用`git push origin branch-name`推送就能成功！
+
+5. 如果`git pull`提示`no tracking information`，则说明本地分支和远程分支的链接关系没有创建，用命令~~~git branch --set-upstream branch-name origin/branch-name~~~。
+`git branch --set-upstream-to=origin/<branch> <branch>`
+
+这就是多人协作的工作模式，一旦熟悉了，就非常简单。
+
+
+- 查看远程库信息，使用`git remote -v`；
+
+- 本地新建的分支如果不推送到远程，对其他人就是不可见的；
+
+- 从本地推送分支，使用`git push origin branch-name`，如果推送失败，先用`git pull`抓取远程的新提交；
+
+- 在本地创建和远程分支对应的分支，使用`git checkout -b branch-name origin/branch-name`，本地和远程分支的名称最好一致；
+
+- 建立本地分支和远程分支的关联，使用~~~git branch --set-upstream branch-name origin/branch-name~~~；
+`git branch --set-upstream-to=origin/<branch> <branch>`
+- 从远程抓取分支，使用`git pull`，如果有冲突，要先处理冲突。
+
+- ` git push origin :<branch>` 可以删除远程分支
+
+## 标签
+为了更好的查找版本，所以需要打上一个TAG
+
+### 创建标签
+
+`git tag <tagname>`用于新建一个标签，默认为`HEAD`，也可以指定一个`commit id`,用`git tag <tagname> <commit id>`打上标签
+
+`git tag -a <tagname> -m "blablabla..."`可以指定标签信息
+
+`git tag -s <tagname> -m "blablabla..."`可以用PGP签名标签，签名采用PGP签名，因此，必须首先安装gpg（GnuPG），如果没有找到gpg，或者没有gpg密钥对，就会报错，用PGP签名的标签是不可伪造的，因为可以验证PGP签名。
+
+`git tag`可以查看所有标签,顺序是按照字母排序的。
+`git show <tagname>` 查看标签信息。
+
+### 操作标签
+- `git push origin <tagname>`可以推送一个本地标签；
+
+- `git push origin --tags`可以推送全部未推送过的本地标签；
+
+- `git tag -d <tagname>`可以删除一个本地标签；
+
+- `git push origin :refs/tags/<tagname>`可以删除一个远程标签。
+>要删除远程标签，要先删除本地标签
+
+## 自定义Git
+
+### 忽略特殊文件
+有些不需要提交的文件可以通过新建一个`.gitignore`的文件，然后把不需要提交的文件名输入到`.gitignore`中，并把`.gitignore`提交了。这样就可以忽略不需要提交的文件了。
+>如果要强制提交的，可以用`git add -f <name>`进行提交
+>如果发现`.gitignore`写的有问题，可以通过`git check-ignore`进行检查。
+>`.gitignore`文件本身要放到版本库里，并且可以对`.gitignore`做版本管理！
+
+### 配置别名
+`git config --global alias.<别名> <命令>`进行别名配置
+如`git config --global alias.st status`就是把`status`设置成`st`
+
+>配置Git的时候，加上`--global`是针对当前用户起作用的，如果不加，那只针对当前的仓库起作用。
+>每个仓库的Git配置文件都放在`.git/config`文件中.
+>当前用户的Git配置文件放在用户主目录下的一个隐藏文件`.gitconfig`中.
+>可以打开配置文件，对里面的`[alias]`进行别名的添加、修改和删除。
+
 
