@@ -10,15 +10,7 @@ sdfasdfasdf
 create new branch is quick
 Creating a new branch is quick and simple.
 
-分支管理测试
 
-sdfadfasdfasdfasdfasdfasdfasf
-
-
-sdfsdafsdfadf
-
-0831
+Creating a new branch is quick AND simple.
 
 
-asdfadfasdf
-sadfadsfadfadfadfadf
