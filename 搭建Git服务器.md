@@ -14,12 +14,12 @@ useradd git
 >这里要注意把目录和文件夹的拥有者改为git
 >出于安全考虑，还把目录权限改为700，文件名称改为600
 	
-	```
+	
 	把etc/ssh/sshd_conf中的这三个注释去掉
 	RSAAuthentication yes
 	PubkeyAuthentication yes
 	AuthorizedKeysFile      .ssh/authorized_keys
-	```
+	
 
 4. 初始化Git仓库
 选定一个目录作为Git仓库，假如仓库是`/home/gitrepo/test.git`,进入`/home/gitrepo/`目录运行以下命令：
