@@ -11,6 +11,15 @@
 useradd git
 ```
 3. 收集所有需要登录到git服务器的用户的公钥，把所有公钥导入到`/home/git/.ssh/authorized_keys`文件里，一行一个。
+>这里要注意把目录和文件夹的拥有者改为git
+>出于安全考虑，还把目录权限改为700，文件名称改为600
+	
+	```
+	把etc/ssh/sshd_conf中的这三个注释去掉
+	RSAAuthentication yes
+	PubkeyAuthentication yes
+	AuthorizedKeysFile      .ssh/authorized_keys
+	```
 
 4. 初始化Git仓库
 选定一个目录作为Git仓库，假如仓库是`/home/gitrepo/test.git`,进入`/home/gitrepo/`目录运行以下命令：
@@ -38,5 +47,6 @@ git:x:503:507::/home/git:/usr/bin/git-shell
 ```
 git clone git@192.168.106.142:/home/gitrepo/test.git
 ```
+>这里的ip改为服务的ip
 
 这样Git服务器就完成了，之后只要把本地的分支推送到服务器就可以了。
