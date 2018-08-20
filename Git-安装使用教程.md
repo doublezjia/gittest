@@ -16,7 +16,7 @@
 
 安装完后，进行最后一步的设置，在命令行中运行一下命令：
 ```git	
-git config --blobal user.name "用户名"
+git config --global user.name "用户名"
 git config --global user.email "用户邮箱"
 ```
 
